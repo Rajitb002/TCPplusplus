@@ -1,2 +1,2 @@
 # TCPplusplus
-C++ (I tried) implementation of TCP specified by IETF'S RCF 793
+C++ (I tried but I ended up using some C) implementation of TCP specified by IETF'S RCF 793. On hold currently 
