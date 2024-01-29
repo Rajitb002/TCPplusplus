@@ -80,6 +80,7 @@ int tun_alloc()
 
 int main()
 {
+	// file id associated with the specific tun device
 	int tun_fd = 0;
 
 	cout << "Reading from tun0"
@@ -90,7 +91,8 @@ int main()
 
 	if (tun_fd < 0)
 	{
-		perror("Could not connect to existing  interface");
+		cerr << "Could not connect to existing  interface"
+			 << "\n";
 		exit(1);
 	}
 
@@ -101,7 +103,7 @@ int main()
 		nread = read(tun_fd, buffer, sizeof(buffer));
 		if (nread < 0)
 		{
-			cout << "Could not read what tun0 is sending"
+			cerr << "Could not read what tun0 is sending"
 				 << "\n";
 
 			close(tun_fd);
@@ -110,5 +112,6 @@ int main()
 		cout << "tun0 sending out : "
 			 << nread << "bytes \n";
 	}
+
 	return 0;
 }
