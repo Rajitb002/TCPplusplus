@@ -9,9 +9,6 @@
 #include <sys/ioctl.h>
 #include <sys/stat.h>
 #include <fcntl.h>
-#include <arpa/inet.h>
-#include <sys/select.h>
-#include <sys/time.h>
 #include <errno.h>
 #include <stdarg.h>
 
@@ -23,14 +20,10 @@ char buffer[BUFSIZE];
 
 /**
  *
- * @brief This main method implements a TCP connection as specified by IETF's RCF 793, RCF XXX, ...to a bare minimum. This is heavily
+ * @brief This main method implements a TCP connection as specified by IETF's RCF 793, RCF 7414, ...to a bare minimum. This is heavily
  * inspired by Jon Gjenset's series in implementing TCP in Rust
  *
- * References:
- * Pcapplusplus: https://pcapplusplus.github.io/
- * Jon Gjenset's series: https://www.youtube.com/watch?v=bzja9fQWzdA&t=17809s
- *
- */
+/
 
 /**
  * @brief
@@ -54,8 +47,7 @@ int tun_alloc()
 
 	if ((fd = open("/dev/net/tun", O_RDWR)) < 0)
 	{
-		cout << "What was not supposed to happen with tun_alloc_old happened"
-			 << "\n";
+		cout << "What was not supposed to happen with tun_alloc_old happened" << "\n";
 		return fd; // This never happens apparently unless u run multiple threads of the interface
 	}
 
@@ -80,38 +72,36 @@ int tun_alloc()
 
 int main()
 {
-	// file id associated with the specific tun device
 	int tun_fd = 0;
 
-	cout << "Reading from tun0"
-		 << "\n";
+	cout << "Reading from tun0" << "\n";
 
 	int nread;
 	tun_fd = tun_alloc(); /* tun interface */
 
 	if (tun_fd < 0)
 	{
-		cerr << "Could not connect to existing  interface"
-			 << "\n";
-		exit(1);
+		cerr << "Could not connect to existing  interface" << "\n";
+		exit(EXIT_FAILURE);
 	}
 
 	/* Now read data coming from the kernel */
 	while (1)
 	{
 		/* Note that "buffer" should be at least the MTU size of the interface, eg 1500 bytes */
+		// This captures packets being sent 0.0 to 0.255 (192/24)
 		nread = read(tun_fd, buffer, sizeof(buffer));
 		if (nread < 0)
 		{
-			cerr << "Could not read what tun0 is sending"
-				 << "\n";
-
+			cerr << "Could not read what tun0 is sending" << "\n";
 			close(tun_fd);
-			exit(1);
+			exit(EXIT_FAILURE);
 		}
-		cout << "tun0 sending out : "
-			 << nread << "bytes \n";
+		cout << "tun0 sending out : "<< nread << " bytes \n";
+		cout << "buffer:" << bufer[1] << "\n";
 	}
 
+
+	close(tun_fd);
 	return 0;
 }
