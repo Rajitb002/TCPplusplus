@@ -19,3 +19,4 @@ To do:
         congestion control
         retransmission timeout computation
 
+Currently can read and interpret IPV4 packets from different IP. Need to simplify setup
